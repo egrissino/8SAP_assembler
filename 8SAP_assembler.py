@@ -64,7 +64,7 @@ def assemble_SAP(source, filename):
         ln += 1
 
         # check for comments or malformed lines
-        if (line[0] in ["#","/",'*']) or (len(line) < 2) or (line == ""):
+        if (line[0] in ["#","/",'*', "@"]) or (len(line) < 2) or (line == ""):
             continue
 
         # get list of symbols on line
@@ -231,7 +231,10 @@ def assemble_SAP(source, filename):
     for i in range(0,len(opcodes),step):
         msg = ""
         for n in range(step):
-            msg += "{}, ".format(opcodes[i+n])
+            try:
+                msg += "{}, ".format(opcodes[i+n])
+            except IndexError as e:
+                msg += "0x00, "
         print(msg)
 
     return prom, ram
